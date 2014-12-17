@@ -1,15 +1,8 @@
 <?php session_start(); ?>
-<html>
-	<head>
-	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-	</head>
-		<body>
+<?php require_once("../includes/db_connect.php"); ?>
+<?php include("layout/header.php"); ?>
 
 <?php
-	$db = new PDO("mysql:host=localhost;dbname=blog;", "root", "");
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 		//Inställningar för error hantering
-	$db->exec("SET NAMES 'utf8'");	
-	
 	$_SESSION['msg'] = null;
 	$userErr = $emailErr = $passErr = $rePassErr = "";
 	if(isset($_POST['spara'])){
@@ -127,5 +120,4 @@
 		
 	</form>
 </table>
-</body>
-</html>
+<?php include("layout/footer.php"); ?>
