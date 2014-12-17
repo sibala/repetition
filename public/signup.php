@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <html>
 	<head>
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
@@ -6,8 +7,10 @@
 
 <?php
 	$db = new PDO("mysql:host=localhost;dbname=blog;", "root", "");
-
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 		//Inställningar för error hantering
+	$db->exec("SET NAMES 'utf8'");	
 	
+	$_SESSION['msg'] = null;
 	$userErr = $emailErr = $passErr = $rePassErr = "";
 	if(isset($_POST['spara'])){
 		
@@ -19,7 +22,7 @@
 		
 		
 		if (!preg_match("/^[a-zA-Z0-9åäöÅÄÖ]*$/",$user)) {
-		  $userErr = "Only letters and white space allowed"; 
+		  $userErr = "Only letters and numbers are allowed"; 
 		}
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		  $emailErr = "Invalid email format"; 
@@ -47,7 +50,7 @@
 			]);
 			
 		} catch(Exception $err ){
-			echo $err;
+			$_SESSION['msg'] = $err;
 		}
 		
 		$users = $ps->fetch(PDO::FETCH_ASSOC); // hämtar en rad
@@ -57,7 +60,7 @@
 			$userErr = "Username is taken. Please choose another username";
 		}
 		
-		if(empty($userErr) && empty($emailErr) && empty($passErr)){
+		if(empty($userErr) && empty($emailErr) && empty($passErr) && empty($rePassErr)){
 			
 			$pass = password_hash($pass, PASSWORD_BCRYPT);
 			
@@ -75,18 +78,19 @@
 				]);
 			
 			} catch(Exception $err ){
-				echo $err;
+				$_SESSION['msg'] = $err;
 			}
 			
 			if($result){
-				echo "Success";
+				$_SESSION['msg'] = "Success";
 			} else {
-				echo "Failed";
+				$_SESSION['msg'] = "Failed";
 			}
 		}
 	}
 ?>
 <h1>Sign Up!</h1>
+<?php echo $_SESSION['msg']; ?><br />
 <table>
 	<form action="signup.php" method="POST">
 		

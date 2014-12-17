@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <html>
 	<head>
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
@@ -6,7 +7,10 @@
 		
 <?php
 	$db = new PDO("mysql:host=localhost;dbname=blog;", "root", "");
-
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 		//Inställningar för error hantering
+	$db->exec("SET NAMES 'utf8'");	
+	
+	$_SESSION['msg'] = null;
 	if(isset($_POST['spara'])){
 		
 		$user = trim($_POST['username']);
@@ -21,7 +25,7 @@
 			]);
 			
 		} catch(Exception $err ){
-			echo $err;
+			$_SESSION['msg'] = $err;
 		}
 		
 		$users = $ps->fetch(PDO::FETCH_ASSOC); // hämtar en rad
@@ -29,17 +33,18 @@
 		
 		if($users){
 			if(password_verify($pass, $users['hashed_password'] )){
-				echo "Logged in";
+				$_SESSION['msg'] = "Logged in";
 			} else {
-				echo "Failed";
+				$_SESSION['msg'] = "Failed";
 			}
 		} else {
-				echo "Failed";
+				$_SESSION['msg'] = "Failed";
 		}
 	}
 ?>
 
 <h1>Login!</h1>
+<?php echo $_SESSION['msg']; ?>
 <table>
 	<form action="login.php" method="POST">
 	
