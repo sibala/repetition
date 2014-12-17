@@ -1,3 +1,9 @@
+<html>
+	<head>
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+	</head>
+		<body>
+		
 <?php
 	$db = new PDO("mysql:host=localhost;dbname=blog;", "root", "");
 
@@ -50,3 +56,5 @@
 		</tr>
 	</form>
 </table>
+</body>
+</html>

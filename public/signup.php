@@ -1,5 +1,12 @@
+<html>
+	<head>
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+	</head>
+		<body>
+
 <?php
 	$db = new PDO("mysql:host=localhost;dbname=blog;", "root", "");
+
 	
 	$userErr = $emailErr = $passErr = $rePassErr = "";
 	if(isset($_POST['spara'])){
@@ -11,7 +18,7 @@
 		$rePass = trim($_POST['rePass']);
 		
 		
-		if (!preg_match("/^[a-zA-Z ]*$/",$user)) {
+		if (!preg_match("/^[a-zA-Z0-9åäöÅÄÖ]*$/",$user)) {
 		  $userErr = "Only letters and white space allowed"; 
 		}
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -116,5 +123,5 @@
 		
 	</form>
 </table>
-
-
+</body>
+</html>
